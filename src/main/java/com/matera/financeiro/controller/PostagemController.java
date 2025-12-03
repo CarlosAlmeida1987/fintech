@@ -4,6 +4,9 @@ import com.matera.financeiro.dto.BalanceResponseDTO;
 import com.matera.financeiro.dto.LancamentoRequestDTO;
 import com.matera.financeiro.dto.PostagemRequestDTO;
 import com.matera.financeiro.dto.ValoresResponseDTO;
+import com.matera.financeiro.dto.PixDepositoRequestDTO;
+import com.matera.financeiro.dto.PixTransferirRequestDTO;
+import com.matera.financeiro.dto.PixTransferirResponseDTO;
 import com.matera.financeiro.service.PostagemService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -63,6 +66,33 @@ public class PostagemController {
     @PostMapping(path = "/pagamentos", consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ValoresResponseDTO> caixa(@Valid @RequestBody LancamentoRequestDTO request) {
         ValoresResponseDTO response = postagemService.procesLancamentos(request);
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "Depositar via PIX", description = "Credita valor na conta destino via PIX",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Depósito realizado",
+                            content = @Content(schema = @Schema(implementation = BalanceResponseDTO.class))),
+                    @ApiResponse(responseCode = "400", description = "Erro de validação"),
+                    @ApiResponse(responseCode = "404", description = "Conta não encontrada")
+            })
+    @PostMapping(path = "/pix/depositar", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<BalanceResponseDTO> pixDepositar(@Valid @RequestBody PixDepositoRequestDTO request) {
+        BalanceResponseDTO response = postagemService.pixDeposit(request);
+        return ResponseEntity.ok(response);
+    }
+
+    @Operation(summary = "Transferir via PIX", description = "Transfere valor entre contas via PIX",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "Transferência realizada",
+                            content = @Content(schema = @Schema(implementation = PixTransferirResponseDTO.class))),
+                    @ApiResponse(responseCode = "400", description = "Erro de validação"),
+                    @ApiResponse(responseCode = "404", description = "Conta não encontrada"),
+                    @ApiResponse(responseCode = "422", description = "Saldo insuficiente")
+            })
+    @PostMapping(path = "/pix/transferir", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<PixTransferirResponseDTO> pixTransferir(@Valid @RequestBody PixTransferirRequestDTO request) {
+        PixTransferirResponseDTO response = postagemService.pixTransfer(request);
         return ResponseEntity.ok(response);
     }
 }
