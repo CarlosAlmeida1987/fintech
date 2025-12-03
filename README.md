@@ -1,6 +1,6 @@
 # Fintech
 
-1. Crie uma API RESTful para realizar lançamentos bancários de débito e crédito nas contas dos clientes. 
+1. Crie uma API RESTful para realizar lançamentos bancários de débito e crédito nas contas dos clientes.
 
 2\. Seus endpoints devem permitir as seguintes operações:
 
@@ -30,11 +30,57 @@ parâmetros esperados e formatos de resposta. /swagger-ui.html - /v3/api-docs
 
 
 
+Lançamentos
+
+API para realizar lançamentos de débito e crédito e consultar saldo
+
+
+
+POST
+
+/api/contas/pix/transferir
+
+Transferir via PIX
+
+
+
+POST
+
+/api/contas/pix/depositar
+
+Depositar via PIX
+
+
+
+POST
+
+/api/contas/pagamentos
+
+Realizar lançamentos
+
+
+
+POST
+
+/api/contas/lancamentos
+
+Realizar lançamentos
+
+
+
+GET
+
+/api/contas/{numeroConta}/balance
+
+Obter saldo
+
+
+
 \- Acesse a documentação:
 
-&nbsp; - Swagger UI: http://localhost:8080/swagger-ui.html
+  - Swagger UI: http://localhost:8080/swagger-ui.html
 
-&nbsp; - OpenAPI JSON: http://localhost:8080/v3/api-docs
+  - OpenAPI JSON: http://localhost:8080/v3/api-docs
 
 Como usar os endpoints:
 
@@ -42,33 +88,33 @@ Como usar os endpoints:
 
 \- POST /api/contas/lancamentos
 
-&nbsp; - Corpo da requisição (JSON):
+  - Corpo da requisição (JSON):
 
-&nbsp;   - numeroConta: "0001"
+    - numeroConta: "0001"
 
-&nbsp;   - postagem: lista de itens com tipo ("DEBITO" ou "CREDITO") e quantia (> 0)
+    - postagem: lista de itens com tipo ("DEBITO" ou "CREDITO") e quantia (> 0)
 
-&nbsp; - Exemplo:
+  - Exemplo:
 
-&nbsp;   {
+    {
 
-&nbsp;   "numeroConta": "0001",
+    "numeroConta": "0001",
 
-&nbsp;   "postagem": \[
+    "postagem": \[
 
-&nbsp;   {"tipo":"DEBITO","quantia":100.00},
+    {"tipo":"DEBITO","quantia":100.00},
 
-&nbsp;   {"tipo":"CREDITO","quantia":50.00}
+    {"tipo":"CREDITO","quantia":50.00}
 
-&nbsp;   ]
+    ]
 
-&nbsp;   }
+    }
 
 \- GET /api/contas/0001/balance
 
-&nbsp; - Retorna:
+  - Retorna:
 
-&nbsp;   { "numeroConta": "0001", "balance": 950.00 }
+    { "numeroConta": "0001", "balance": 950.00 }
 
 Erros e mensagens:
 
@@ -86,27 +132,27 @@ Erros e mensagens:
 
 curl -X 'POST' \\
 
-&nbsp; 'http://localhost:8080/api/contas/lancamentos' \\
+  'http://localhost:8080/api/contas/lancamentos' \\
 
-&nbsp; -H 'accept: application/json' \\
+  -H 'accept: application/json' \\
 
-&nbsp; -H 'Content-Type: application/json' \\
+  -H 'Content-Type: application/json' \\
 
-&nbsp; -d '{
+  -d '{
 
-&nbsp; "numeroConta": "0001",
+  "numeroConta": "0001",
 
-&nbsp; "postagens": \[
+  "postagens": \[
 
-&nbsp;   {
+    {
 
-&nbsp;     "tipo": "DEBITO",
+      "tipo": "DEBITO",
 
-&nbsp;     "quantia": 0.01
+      "quantia": 0.01
 
-&nbsp;   }
+    }
 
-&nbsp; ]
+  ]
 
 }'
 
@@ -114,9 +160,7 @@ curl -X 'POST' \\
 
 curl -X 'GET' \\
 
-&nbsp; 'http://localhost:8080/api/contas/0001/balance' \\
+  'http://localhost:8080/api/contas/0001/balance' \\
 
-&nbsp; -H 'accept: application/json'
-
-
+  -H 'accept: application/json'
 
